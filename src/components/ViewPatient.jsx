@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import NavBar from './NavBar'
+import axios from 'axios'
 
 const ViewPatient = () => {
+    const [data,setData]=useState([])
+    const fetchData=()=>{
+        axios.get("http://localhost:8087/view").then(
+            (response)=>{
+                setData(response.data)
+            }
+        ).catch().finally()
+    }
+    useEffect(()=>{fetchData()},[])
     return (
         <div>
+            <NavBar/>
             <div className="container">
                 <div className="row">
                     <div className="col col-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12">
@@ -18,18 +30,16 @@ const ViewPatient = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                        </tr>
+                                        {data.map(
+                                            (value,index)=>{
+                                                return <tr>
+                                                <th scope="row">{value.pid}</th>
+                                                <td>{value.pname}</td>
+                                                <td>{value.department}</td>
+                                                <td>{value.date}</td>
+                                            </tr>
+                                            }
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
